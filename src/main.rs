@@ -1,6 +1,5 @@
 mod config;
 mod commands;
-
 use std::env;
 
 fn main() {
