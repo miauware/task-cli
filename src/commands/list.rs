@@ -1,6 +1,7 @@
 use crate::config::{config_dir, ensure_dir_exists};
 use std::fs;
 use std::path::PathBuf;
+use colored::*; 
 
 pub fn run() {
     ensure_dir_exists();
@@ -36,21 +37,24 @@ pub fn run() {
         let id = path
             .file_stem()
             .and_then(|s| s.to_str())
-            .unwrap_or("?");
+            .unwrap_or("?").blue();
 
         let description = json["description"].as_str().unwrap_or("<invalid>");
         let status = if json["done"].as_bool().unwrap_or(false) {
             " Done"
         } else {
             " Todo"
-        };
-        let priority = json["priority"].as_str().unwrap_or("no priority");
+        }.magenta();
+         let priority = json["priority"].as_str().unwrap_or("no priority");
+        let padded = format!("{:<12}", priority);
 
-        // INFO: Print task row with aligned columns
-        println!(
-            "|   {:<9}| {:<6} | {:<12} | {}",
-            status, id, priority, description
-        );
+        let colored_priority = match priority {
+        "low" => padded.replace(priority, &format!("{}", "low".green())),
+        "medium" => padded.replace(priority, &format!("{}", "medium".blue())),
+        "high" => padded.replace(priority, &format!("{}", "high".red())),
+        _ => padded,};
+        println!("|   {:<9}| {:<6} | {} | {}",status, id, colored_priority, description);
         println!("--------------------------------------------------------------");
+
     }
 }
