@@ -25,7 +25,7 @@ pub fn run() {
     println!("--------------------------------------------------------------");
     println!(
         "{:<12} | {:<6} | {:<12} | {}",
-        "|Id", "Status", "Priority", "Task                  |"
+        "|   Status", "Id", "Priority", "Task                  |"
     );
     println!("--------------------------------------------------------------");
     for path in entries {
@@ -40,16 +40,17 @@ pub fn run() {
 
         let description = json["description"].as_str().unwrap_or("<invalid>");
         let status = if json["done"].as_bool().unwrap_or(false) {
-            "done"
+            " Done"
         } else {
-            "todo"
+            " Todo"
         };
         let priority = json["priority"].as_str().unwrap_or("no priority");
 
         // INFO: Print task row with aligned columns
         println!(
-            "{:<12} | {:<6} | {:<12} | {}",
-            id, status, priority, description
+            "|   {:<9}| {:<6} | {:<12} | {}",
+            status, id, priority, description
         );
+        println!("--------------------------------------------------------------");
     }
 }
